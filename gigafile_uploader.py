@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from tqdm import tqdm
 import time, sys, os
+from pathlib import Path
 
 
 def upload_files(file_paths, lifetime=100):
@@ -63,6 +64,12 @@ def upload_files(file_paths, lifetime=100):
 
     progress_bar.close()
 
+    # .zipの名前決定
+    zip_file_name = driver.find_element(By.ID,"zip_file_name")
+    p_file = Path(file_paths[0])
+    print(p_file.parent.name)
+    zip_file_name.send_keys(p_file.parent.name)
+
     # 「まとめてダウンロード」リンクのURLを取得してクリック
     matomete_link_btn = driver.find_element(By.ID, "matomete_btn")
     driver.execute_script("arguments[0].click();", matomete_link_btn)
@@ -78,17 +85,18 @@ def upload_files(file_paths, lifetime=100):
         print("close arert")
     except TimeoutException:
         print("not displayed arert")
-
+    
     matomete_url_element = driver.find_element(By.ID, "matomete_url")
     origin_value = matomete_url_element.get_attribute("origin")
 
-    #delete_key_url_element = driver.find_element(By.ID, "delkey")
-    #delkey_origin_value = delete_key_url_element.get_attribute("origin")
-    
     # 終了時にブラウザを閉じる
     driver.quit()
 
-    print("URL:"+str(origin_value))
+    print("------------")
+    print(p_file.parent.name)
+    print(origin_value)
+    #print("file name: "+str(p_file.parent.name))
+    #print("URL:"+str(origin_value))
     #print("Delkey:"+str(delkey_origin_value))
     
     #URLを返す
