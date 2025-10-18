@@ -26,11 +26,11 @@ def move_files_out_of_directory(source_dir: str, destination_dir: str):
     if not os.path.exists(destination_dir):
         raise FileNotFoundError(f"Destination directory not found: {destination_dir}")
 
+    random_prefix = randomname(6)
     for filename in os.listdir(source_dir):
         source_path = os.path.join(source_dir, filename)
         if os.path.isfile(source_path):
-            random_filename = str(randomname(6)+filename)
-            destination_path = os.path.join(destination_dir, random_filename)
+            destination_path = os.path.join(destination_dir, str(random_prefix+filename))
             print(destination_path)
             try:
                 shutil.move(source_path, destination_path)
